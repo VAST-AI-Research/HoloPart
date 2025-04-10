@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="description"
+      content="generative 3D part amodal segmentation--decomposing a 3D shape into complete, semantically meaningful parts." />
+    <meta
+      name="keywords"
+      content="3D Part segmentation, 3D Part completion, Diffusion model" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>
+      Generative 3D Part Amodal Segmentation
+    </title>
+
+    <link
+      href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro"
+      rel="stylesheet" />
+
+    <link rel="stylesheet" href="./static/css/bulma.min.css" />
+    <link rel="stylesheet" href="./static/css/bulma-carousel.min.css" />
+    <link rel="stylesheet" href="./static/css/bulma-slider.min.css" />
+    <link rel="stylesheet" href="./static/css/fontawesome.all.min.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css" />
+    <link rel="stylesheet" href="./static/css/index.css" />
+    <link rel="icon" href="./static/images/favicon.png" />
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script defer src="./static/js/fontawesome.all.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three/examples/js/loaders/GLTFLoader.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three/examples/js/controls/OrbitControls.js"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.css" />
+    <script src="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.js"></script>
+
+    <!--  Scene Viewer -->
+    <link rel="stylesheet" href="modules/SceneViewer/scene-viewer.css" />
+
+    <!-- Video Viewer -->
+    <link rel="stylesheet" href="modules/VideoViewer/video-viewer.css" />
+  </head>
+  <body>
+    <nav class="navbar" role="navigation" aria-label="main navigation">
+      <div class="navbar-brand">
+        <a
+          role="button"
+          class="navbar-burger"
+          aria-label="menu"
+          aria-expanded="false">
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+        </a>
+      </div>
+
+      <div class="navbar-menu">
+        <div class="navbar-start" style="flex-grow: 1; justify-content: center">
+          <a class="navbar-item" href="https://github.com/huanngzh">
+            <span class="icon">
+              <i class="fas fa-home"></i>
+            </span>
+          </a>
+
+          <div class="navbar-item has-dropdown is-hoverable">
+            <a class="navbar-link"> More Research </a>
+            <div class="navbar-dropdown">
+              <a
+                class="navbar-item"
+                href="https://yhyang-myron.github.io/SAMPart3D-website/"
+                target="_blank">
+                SAMPart3D
+              </a>
+              <a
+                class="navbar-item"
+                href="https://huanngzh.github.io/MIDI-Page/"
+                target="_blank">
+                MIDI
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <section class="hero">
+      <div class="hero-body">
+        <div class="container is-max-desktop">
+          <div class="columns is-centered">
+            <div class="column has-text-centered">
+              <h1 class="title is-1 publication-title">
+                Generative 3D Part Amodal Segmentation
+              </h1>
+              <div class="is-size-5 publication-authors">
+                <a
+                  href="https://yhyang-myron.github.io/"
+                  target="_blank"
+                  >Yunhan Yang</a
+                ><sup>1</sup>,
+                <a
+                  href="https://scholar.google.com/citations?user=b7ZJV9oAAAAJ"
+                  target="_blank"
+                  >Yuan-Chen Guo</a
+                ><sup>2</sup>,
+                <a
+                  href="https://scholar.google.com/citations?user=lHb5gzoAAAAJ"
+                  target="_blank"
+                  >Yukun Huang</a
+                ><sup>1</sup>,
+                <a
+                  href="https://scholar.google.com/citations?user=5TEI1eAAAAAJ"
+                  target="_blank"
+                  >Zi-Xin Zou</a
+                ><sup>2</sup>,<br />
+                <a
+                  href="https://smuelpenpen.com/"
+                  target="_blank"
+                  >Zhipeng Yu</a
+                ><sup>2</sup>,
+                <a
+                  href="https://scholar.google.com/citations?user=a7AMvgkAAAAJ"
+                  target="_blank"
+                  >Yangguang Li</a
+                ><sup>2</sup>,
+                <a href="https://yanpei.me/" target="_blank">Yan-Pei Cao</a
+                ><sup>2✉</sup>,
+                <a href="https://xh-liu.github.io/" target="_blank"
+                  >Xihui Liu</a
+                ><sup>1✉</sup>
+              </div>
+
+              <div class="is-size-5 publication-authors">
+                <sup>1</sup>The University of Hong Kong &nbsp;&nbsp; <sup>2</sup>VAST
+                <br />
+                <sup>✉</sup>Corresponding Authors
+              </div>
+
+              <div class="column has-text-centered">
+                <div class="publication-links">
+                  <!-- PDF Link. -->
+                  <span class="link-block">
+                    <a
+                      href=""
+                      target="_blank"
+                      class="external-link button is-normal is-rounded is-dark">
+                      <span class="icon">
+                        <i class="fas fa-file-pdf"></i>
+                      </span>
+                      <span>Paper</span>
+                    </a>
+                  </span>
+                  <!-- Video Link. -->
+                  <!-- <span class="link-block">
+                    <a href="https://www.youtube.com/watch?v=MrKrnHhk8IA"
+                       class="external-link button is-normal is-rounded is-dark">
+                      <span class="icon">
+                          <i class="fab fa-youtube"></i>
+                      </span>
+                      <span>Video</span>
+                    </a>
+                  </span> -->
+                  <!-- Code Link. -->
+                  <span class="link-block">
+                    <a
+                      href="https://github.com/VAST-AI-Research/HoloPart"
+                      target="_blank"
+                      class="external-link button is-normal is-rounded is-dark">
+                      <span class="icon">
+                        <i class="fab fa-github"></i>
+                      </span>
+                      <span>Code</span>
+                    </a>
+                  </span>
+                  <!-- Model Link. -->
+                  <span class="link-block">
+                    <a
+                      href="https://huggingface.co/VAST-AI/HoloPart"
+                      target="_blank"
+                      class="external-link button is-normal is-rounded is-dark">
+                      <span class="icon">
+                        <i class="fa fa-database"></i>
+                      </span>
+                      <span>Model</span>
+                    </a>
+                  </span>
+                  <!-- Demo Link. -->
+                  <span class="link-block">
+                    <a
+                      href="https://huggingface.co/spaces/VAST-AI/HoloPart"
+                      class="external-link button is-normal is-rounded is-dark">
+                      <span class="icon">
+                        <i class="far fa-smile"></i>
+                      </span>
+                      <span>Demo</span>
+                    </a>
+                  </span>
+                </div>
+              </div>
+
+              <div class="is-size-5 publication-authors">
+                <hr
+                  style="
+                    width: 100%;
+                    height: 0.7px;
+                    background-color: rgba(0, 0, 0, 0.665);
+                    margin-top: 1em;
+                  " />
+                Decompose a 3D shape into <strong>complete, semantically</strong> meaningful parts.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="hero teaser">
+      <div class="container is-max-desktop">
+        <div class="columns is-centered has-text-centered">
+          <div class="column is-full-width">
+            <img src="./assets/images/teaser.png" alt="teaser" style="width: 100%" />
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container is-max-desktop">
+        <!-- Abstract. -->
+        <div class="columns is-centered has-text-centered">
+          <div class="column is-four-fifths">
+            <h2 class="title is-3">Abstract</h2>
+            <div class="content has-text-justified">
+              <p>
+                3D part amodal segmentation--decomposing a 3D shape into complete, semantically meaningful parts, 
+                even when occluded--is a challenging but crucial task for 3D content creation and understanding. 
+                Existing 3D part segmentation methods only identify visible surface patches, limiting their utility. 
+                Inspired by 2D amodal segmentation, we introduce this novel task to the 3D domain and propose a practical, 
+                two-stage approach, addressing the key challenges of inferring occluded 3D geometry, maintaining global shape consistency, 
+                and handling diverse shapes with limited training data. First, we leverage existing 3D part segmentation to obtain initial, 
+                incomplete part segments. Second, we introduce PartComp, a novel diffusion-based model, to complete these segments into full 3D parts. 
+                PartComp utilizes a specialized architecture with local attention to capture fine-grained 
+                part geometry and global shape context attention to ensure overall shape consistency. We introduce new benchmarks 
+                based on the ABO and PartObjaverse-Tiny datasets and demonstrate that PartComp significantly outperforms state-of-the-art 
+                shape completion methods. Incorporating PartComp with existing segmentation techniques, we achieve promising results on 
+                3D part amodal segmentation, opening new avenues for applications in geometry editing, animation, and material assignment.
+              </p>
+            </div>
+          </div>
+        </div>
+        <!--/ Abstract. -->
+      </div>
+    </section>
+
+    <!-- Scripts Start -->
+    <script type="module">
+      import { ViewerModule } from "./modules/SceneViewer/scene-viewer.js";
+
+      const viewer = new ViewerModule(
+        ".scene-viewer",
+        [
+          "000",
+          "001",
+          "002",
+          "003",
+          "004",
+          "005",
+          "006",
+          "007",
+          "008",
+          "009",
+        ],
+        "assets/models",
+        "assets/images"
+      );
+      viewer.init();
+    </script>
+    <!-- Scripts End -->
+
+    <section class="section" style="padding-top: 0">
+      <div class="container is-max-desktop">
+        <div class="columns is-centered has-text-centered">
+          <div class="column is-full-width">
+            <div class="has-text-centered">
+              <h2 class="title is-3">Interactive Results</h2>
+            </div>
+            <div class="scene-viewer">
+              <!-- Scene Viewer -->
+              <div id="loading-overlay">
+                <div class="loading-spinner"></div>
+              </div>
+              <div id="viewer-container"></div>
+              <div id="button-block" style="text-align: center; margin: 10px auto;"></div>
+              <div class="swiper">
+                <div class="swiper-button-prev"></div>
+                <div class="swiper-button-next"></div>
+                <div class="swiper-wrapper" id="image-slider"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container is-max-desktop">
+        <div class="columns is-centered has-text-centered">
+          <div class="column is-full-width">
+            <div class="has-text-centered">
+              <h2 class="title is-3">Applications</h2>
+            </div>
+            <br />
+            <div class="has-text-justified">
+              3D part amodal segmentation is capable of numerous downstream applications, 
+              such as <strong>Geometry Editing, Geometry Processing, Material Editing and Animation</strong>.
+            </div>
+            <br />
+            <video controls autoplay muted loop playsinline height="80%">
+              <source src="./assets/videos/applications.mp4" type="video/mp4" />
+            </video>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container is-max-desktop">
+        <div class="has-text-centered">
+          <h2 class="title is-3">Geometry Super-resolution</h2>
+        </div>
+        <br />
+        <div class="columns is-centered">
+          <div class="column is-full-width">
+            <br />
+            <img src="./assets/images/geo_super.png" class="" alt="" />
+            By representing a part with the same number of tokens as the overall object, we can achieve geometry super-resolution.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container is-max-desktop">
+        <div class="has-text-centered">
+          <h2 class="title is-3">Method Overview</h2>
+        </div>
+        <br />
+        <div class="columns is-centered">
+          <div class="column is-full-width">
+            <br />
+            <img src="./assets/images/overview.png" class="" alt="" />
+            Given a whole 3D shape and a corresponding surface segmentation mask, 
+            PartComp encodes these inputs into latent tokens, using context-aware attention to 
+            capture global shape context and local attention to capture local part detailed features 
+            and position mapping. These tokens are used as conditions and injected into the part 
+            diffusion model via cross-attention respectively. During training, noise is added to 
+            complete 3D parts, and the model learns to denoise them and recover the original complete part.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="BibTeX">
+      <div class="container is-max-desktop content">
+        <div class="has-text-centered">
+          <h2 class="title">BibTeX</h2>
+        </div>
+        <div
+          class="columns is-centered has-text-centered"
+          style="padding-bottom: 1.5rem">
+          <div class="column is-four-fifths">
+            <div class="content has-text-justified">
+              <pre><code>
+
+              </code></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <div class="container">
+        <div class="content has-text-centered">
+          <a class="icon-link" href="">
+            <i class="fas fa-file-pdf"></i>
+          </a>
+          <a
+            class="icon-link"
+            href=""
+            class="external-link"
+            disabled>
+            <i class="fab fa-github"></i>
+          </a>
+        </div>
+        <div class="columns is-centered">
+          <div class="column is-8">
+            <div class="content">
+              <p style="text-align: center">
+                Source code can be found at
+                <a href="" target="_blank"
+                  >HoloPart-Page</a
+                >. The website template is borrowed from
+                <a href="https://nerfies.github.io/" target="_blank">Nerfies</a
+                > and 
+                <a href="https://huanngzh.github.io/MIDI-Page/" target="_blank">MIDI-Page</a
+                >.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>
