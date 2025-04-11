@@ -3,7 +3,7 @@
 <div align="center">
 
 [![Project Page](https://img.shields.io/badge/🏠-Project%20Page-blue.svg)](https://vast-ai-research.github.io/HoloPart)
-[![Paper](https://img.shields.io/badge/📑-Paper-green.svg)]()
+[![Paper](https://img.shields.io/badge/📑-Paper-green.svg)](https://arxiv.org/abs/2504.07943)
 [![Model](https://img.shields.io/badge/🤗-Model-yellow.svg)](https://huggingface.co/VAST-AI/HoloPart)
 [![Online Demo](https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-Spaces-blue)](https://huggingface.co/spaces/VAST-AI/HoloPart)
 
@@ -87,5 +87,10 @@ We are grateful to the broader research community for their open exploration and
 ## 📚 Citation
 
 ```
-
+@article{yang2025holopart,
+      title={HoloPart: Generative 3D Part Amodal Segmentation}, 
+      author={Yang, Yunhan and Guo, Yuan-Chen and Huang, Yukun and Zou, Zi-Xin and Yu, Zhipeng and Li, Yangguang and Cao, Yan-Pei and Liu, Xihui},
+      journal={arXiv preprint arXiv:2504.07943},
+      year={2025}
+}
 ```
